@@ -19,4 +19,4 @@ def validate_description(value):
 
 
 def toggle_state(completed):
-    return True
+    return not completed
