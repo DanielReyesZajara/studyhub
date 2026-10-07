@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="es">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>StudyHub - tareas de estudio</title>
+<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+<main>
+  <header><p class="label">EGC / SIMULACRO PRÁCTICO</p><h1>StudyHub</h1>
+    <p>Organiza las tareas de tu grupo de estudio.</p></header>
+  <section class="panel"><h2>Nueva tarea</h2>
+    <form action="{{ url_for('tasks.create_task_form') }}" method="post">
+      <label for="title">Título</label>
+      <input id="title" name="title" maxlength="120" required placeholder="Repasar Docker">
+      <label for="description">Descripción</label>
+      <textarea id="description" name="description" maxlength="500" placeholder="Notas opcionales"></textarea>
+      <button id="add-task" type="submit">Añadir tarea</button>
+    </form>
+  </section>
+  <section><h2>Tareas</h2>
+    {% for task in tasks %}
+    <article class="task" data-task-id="{{ task.id }}">
+      <div><h3 class="task-title">{{ task.title }}</h3><p>{{ task.description }}</p>
+        <span class="status">{{ 'Completada' if task.completed else 'Pendiente' }}</span></div>
+      <div class="actions">
+        <form action="{{ url_for('tasks.toggle_task_form', task_id=task.id) }}" method="post">
+          <button class="toggle" type="submit">{{ 'Reabrir' if task.completed else 'Completar' }}</button>
+        </form>
+        <form action="{{ url_for('tasks.delete_task_form', task_id=task.id) }}" method="post">
+          <button class="delete" type="submit">Eliminar</button>
+        </form>
+      </div>
+    </article>
+    {% else %}<p id="empty">Todavía no hay tareas.</p>{% endfor %}
+  </section>
+  <footer>Aplicación educativa local, sin usuarios ni autenticación.</footer>
+</main>
+</html>
